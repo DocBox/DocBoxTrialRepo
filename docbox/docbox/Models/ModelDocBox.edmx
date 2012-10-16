@@ -1,0 +1,578 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="dxss_docboxModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="dxss_docboxModelStoreContainer">
+          <EntitySet Name="dx_department" EntityType="dxss_docboxModel.Store.dx_department" store:Type="Tables" Schema="dxss_docbox" />
+          <EntitySet Name="dx_files" EntityType="dxss_docboxModel.Store.dx_files" store:Type="Tables" Schema="dxss_docbox" />
+          <EntitySet Name="dx_fileversion" EntityType="dxss_docboxModel.Store.dx_fileversion" store:Type="Tables" Schema="dxss_docbox" />
+          <EntitySet Name="dx_privilege" EntityType="dxss_docboxModel.Store.dx_privilege" store:Type="Tables" Schema="dxss_docbox" />
+          <EntitySet Name="dx_user" EntityType="dxss_docboxModel.Store.dx_user" store:Type="Tables" Schema="dxss_docbox" />
+          <EntitySet Name="dx_userdept" EntityType="dxss_docboxModel.Store.dx_userdept" store:Type="Tables" Schema="dxss_docbox" />
+          <AssociationSet Name="dept_user_key" Association="dxss_docboxModel.Store.dept_user_key">
+            <End Role="dx_department" EntitySet="dx_department" />
+            <End Role="dx_userdept" EntitySet="dx_userdept" />
+          </AssociationSet>
+          <AssociationSet Name="fileid_key" Association="dxss_docboxModel.Store.fileid_key">
+            <End Role="dx_files" EntitySet="dx_files" />
+            <End Role="dx_fileversion" EntitySet="dx_fileversion" />
+          </AssociationSet>
+          <AssociationSet Name="fileid_priv_key" Association="dxss_docboxModel.Store.fileid_priv_key">
+            <End Role="dx_files" EntitySet="dx_files" />
+            <End Role="dx_privilege" EntitySet="dx_privilege" />
+          </AssociationSet>
+          <AssociationSet Name="lockedby_key" Association="dxss_docboxModel.Store.lockedby_key">
+            <End Role="dx_user" EntitySet="dx_user" />
+            <End Role="dx_files" EntitySet="dx_files" />
+          </AssociationSet>
+          <AssociationSet Name="owner_id_key" Association="dxss_docboxModel.Store.owner_id_key">
+            <End Role="dx_user" EntitySet="dx_user" />
+            <End Role="dx_files" EntitySet="dx_files" />
+          </AssociationSet>
+          <AssociationSet Name="updatedby_key" Association="dxss_docboxModel.Store.updatedby_key">
+            <End Role="dx_user" EntitySet="dx_user" />
+            <End Role="dx_fileversion" EntitySet="dx_fileversion" />
+          </AssociationSet>
+          <AssociationSet Name="user_dept_key" Association="dxss_docboxModel.Store.user_dept_key">
+            <End Role="dx_user" EntitySet="dx_user" />
+            <End Role="dx_userdept" EntitySet="dx_userdept" />
+          </AssociationSet>
+          <AssociationSet Name="user_priv_key" Association="dxss_docboxModel.Store.user_priv_key">
+            <End Role="dx_user" EntitySet="dx_user" />
+            <End Role="dx_privilege" EntitySet="dx_privilege" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="dx_department">
+          <Key>
+            <PropertyRef Name="deptid" />
+          </Key>
+          <Property Name="deptid" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="dx_files">
+          <Key>
+            <PropertyRef Name="fileid" />
+          </Key>
+          <Property Name="fileid" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="filename" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="parentpath" Type="varchar" Nullable="false" MaxLength="300" />
+          <Property Name="ownerid" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="size" Type="int" Nullable="false" />
+          <Property Name="isencrypted" Type="binary" Nullable="false" MaxLength="1" />
+          <Property Name="isarchived" Type="binary" Nullable="false" MaxLength="1" />
+          <Property Name="islocked" Type="binary" Nullable="false" MaxLength="1" />
+          <Property Name="type" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="creationdate" Type="datetime" Nullable="false" />
+          <Property Name="lockedby" Type="varchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="dx_fileversion">
+          <Key>
+            <PropertyRef Name="versionid" />
+          </Key>
+          <Property Name="fileid" Type="bigint" Nullable="false" />
+          <Property Name="versionid" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="versionnumber" Type="int" Nullable="false" />
+          <Property Name="updatedate" Type="datetime" Nullable="false" />
+          <Property Name="description" Type="varchar" Nullable="false" MaxLength="300" />
+          <Property Name="size" Type="int" Nullable="false" />
+          <Property Name="updatedby" Type="varchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="dx_privilege">
+          <Key>
+            <PropertyRef Name="privilege_id" />
+          </Key>
+          <Property Name="privilege_id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="fileid" Type="bigint" Nullable="false" />
+          <Property Name="userid" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="read" Type="binary" Nullable="false" MaxLength="1" />
+          <Property Name="write" Type="binary" Nullable="false" MaxLength="1" />
+          <Property Name="update" Type="binary" Nullable="false" MaxLength="1" />
+          <Property Name="check" Type="binary" Nullable="false" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="dx_user">
+          <Key>
+            <PropertyRef Name="userid" />
+          </Key>
+          <Property Name="userid" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="fname" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="lname" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="dob" Type="date" Nullable="false" />
+          <Property Name="role" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="pwdhash" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="questionid" Type="int" Nullable="false" />
+          <Property Name="phone" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="anshash" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="actcodehash" Type="varchar" MaxLength="100" />
+          <Property Name="accesslevel" Type="int" Nullable="false" />
+          <Property Name="psalt" Type="varchar" Nullable="false" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="dx_userdept">
+          <Key>
+            <PropertyRef Name="udid" />
+          </Key>
+          <Property Name="userid" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="deptid" Type="int" Nullable="false" />
+          <Property Name="udid" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <Association Name="dept_user_key">
+          <End Role="dx_department" Type="dxss_docboxModel.Store.dx_department" Multiplicity="1" />
+          <End Role="dx_userdept" Type="dxss_docboxModel.Store.dx_userdept" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_department">
+              <PropertyRef Name="deptid" />
+            </Principal>
+            <Dependent Role="dx_userdept">
+              <PropertyRef Name="deptid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fileid_key">
+          <End Role="dx_files" Type="dxss_docboxModel.Store.dx_files" Multiplicity="1" />
+          <End Role="dx_fileversion" Type="dxss_docboxModel.Store.dx_fileversion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_files">
+              <PropertyRef Name="fileid" />
+            </Principal>
+            <Dependent Role="dx_fileversion">
+              <PropertyRef Name="fileid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fileid_priv_key">
+          <End Role="dx_files" Type="dxss_docboxModel.Store.dx_files" Multiplicity="1" />
+          <End Role="dx_privilege" Type="dxss_docboxModel.Store.dx_privilege" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_files">
+              <PropertyRef Name="fileid" />
+            </Principal>
+            <Dependent Role="dx_privilege">
+              <PropertyRef Name="fileid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="lockedby_key">
+          <End Role="dx_user" Type="dxss_docboxModel.Store.dx_user" Multiplicity="1" />
+          <End Role="dx_files" Type="dxss_docboxModel.Store.dx_files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="dx_files">
+              <PropertyRef Name="lockedby" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="owner_id_key">
+          <End Role="dx_user" Type="dxss_docboxModel.Store.dx_user" Multiplicity="1" />
+          <End Role="dx_files" Type="dxss_docboxModel.Store.dx_files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="dx_files">
+              <PropertyRef Name="ownerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="updatedby_key">
+          <End Role="dx_user" Type="dxss_docboxModel.Store.dx_user" Multiplicity="1" />
+          <End Role="dx_fileversion" Type="dxss_docboxModel.Store.dx_fileversion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="dx_fileversion">
+              <PropertyRef Name="updatedby" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="user_dept_key">
+          <End Role="dx_user" Type="dxss_docboxModel.Store.dx_user" Multiplicity="1" />
+          <End Role="dx_userdept" Type="dxss_docboxModel.Store.dx_userdept" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="dx_userdept">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="user_priv_key">
+          <End Role="dx_user" Type="dxss_docboxModel.Store.dx_user" Multiplicity="1" />
+          <End Role="dx_privilege" Type="dxss_docboxModel.Store.dx_privilege" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="dx_privilege">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dxss_docboxModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="dxss_docboxEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="dx_department" EntityType="dxss_docboxModel.dx_department" />
+          <EntitySet Name="dx_files" EntityType="dxss_docboxModel.dx_files" />
+          <EntitySet Name="dx_fileversion" EntityType="dxss_docboxModel.dx_fileversion" />
+          <EntitySet Name="dx_privilege" EntityType="dxss_docboxModel.dx_privilege" />
+          <EntitySet Name="dx_user" EntityType="dxss_docboxModel.dx_user" />
+          <EntitySet Name="dx_userdept" EntityType="dxss_docboxModel.dx_userdept" />
+          <AssociationSet Name="dept_user_key" Association="dxss_docboxModel.dept_user_key">
+            <End Role="dx_department" EntitySet="dx_department" />
+            <End Role="dx_userdept" EntitySet="dx_userdept" />
+          </AssociationSet>
+          <AssociationSet Name="fileid_key" Association="dxss_docboxModel.fileid_key">
+            <End Role="dx_files" EntitySet="dx_files" />
+            <End Role="dx_fileversion" EntitySet="dx_fileversion" />
+          </AssociationSet>
+          <AssociationSet Name="fileid_priv_key" Association="dxss_docboxModel.fileid_priv_key">
+            <End Role="dx_files" EntitySet="dx_files" />
+            <End Role="dx_privilege" EntitySet="dx_privilege" />
+          </AssociationSet>
+          <AssociationSet Name="lockedby_key" Association="dxss_docboxModel.lockedby_key">
+            <End Role="dx_user" EntitySet="dx_user" />
+            <End Role="dx_files" EntitySet="dx_files" />
+          </AssociationSet>
+          <AssociationSet Name="owner_id_key" Association="dxss_docboxModel.owner_id_key">
+            <End Role="dx_user" EntitySet="dx_user" />
+            <End Role="dx_files" EntitySet="dx_files" />
+          </AssociationSet>
+          <AssociationSet Name="updatedby_key" Association="dxss_docboxModel.updatedby_key">
+            <End Role="dx_user" EntitySet="dx_user" />
+            <End Role="dx_fileversion" EntitySet="dx_fileversion" />
+          </AssociationSet>
+          <AssociationSet Name="user_priv_key" Association="dxss_docboxModel.user_priv_key">
+            <End Role="dx_user" EntitySet="dx_user" />
+            <End Role="dx_privilege" EntitySet="dx_privilege" />
+          </AssociationSet>
+          <AssociationSet Name="user_dept_key" Association="dxss_docboxModel.user_dept_key">
+            <End Role="dx_user" EntitySet="dx_user" />
+            <End Role="dx_userdept" EntitySet="dx_userdept" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="dx_department">
+          <Key>
+            <PropertyRef Name="deptid" />
+          </Key>
+          <Property Name="deptid" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" />
+          <NavigationProperty Name="dx_userdept" Relationship="dxss_docboxModel.dept_user_key" FromRole="dx_department" ToRole="dx_userdept" />
+        </EntityType>
+        <EntityType Name="dx_files">
+          <Key>
+            <PropertyRef Name="fileid" />
+          </Key>
+          <Property Name="fileid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="filename" Type="String" Nullable="false" />
+          <Property Name="parentpath" Type="String" Nullable="false" />
+          <Property Name="ownerid" Type="String" Nullable="false" />
+          <Property Name="size" Type="Int32" Nullable="false" />
+          <Property Name="isencrypted" Type="Binary" Nullable="false" />
+          <Property Name="isarchived" Type="Binary" Nullable="false" />
+          <Property Name="islocked" Type="Binary" Nullable="false" />
+          <Property Name="type" Type="String" Nullable="false" />
+          <Property Name="creationdate" Type="DateTime" Nullable="false" />
+          <Property Name="lockedby" Type="String" Nullable="false" />
+          <NavigationProperty Name="dx_fileversion" Relationship="dxss_docboxModel.fileid_key" FromRole="dx_files" ToRole="dx_fileversion" />
+          <NavigationProperty Name="dx_privilege" Relationship="dxss_docboxModel.fileid_priv_key" FromRole="dx_files" ToRole="dx_privilege" />
+          <NavigationProperty Name="dx_user" Relationship="dxss_docboxModel.lockedby_key" FromRole="dx_files" ToRole="dx_user" />
+          <NavigationProperty Name="dx_user1" Relationship="dxss_docboxModel.owner_id_key" FromRole="dx_files" ToRole="dx_user" />
+        </EntityType>
+        <EntityType Name="dx_fileversion">
+          <Key>
+            <PropertyRef Name="versionid" />
+          </Key>
+          <Property Name="fileid" Type="Int64" Nullable="false" />
+          <Property Name="versionid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="versionnumber" Type="Int32" Nullable="false" />
+          <Property Name="updatedate" Type="DateTime" Nullable="false" />
+          <Property Name="description" Type="String" Nullable="false" />
+          <Property Name="size" Type="Int32" Nullable="false" />
+          <Property Name="updatedby" Type="String" Nullable="false" />
+          <NavigationProperty Name="dx_files" Relationship="dxss_docboxModel.fileid_key" FromRole="dx_fileversion" ToRole="dx_files" />
+          <NavigationProperty Name="dx_user" Relationship="dxss_docboxModel.updatedby_key" FromRole="dx_fileversion" ToRole="dx_user" />
+        </EntityType>
+        <EntityType Name="dx_privilege">
+          <Key>
+            <PropertyRef Name="privilege_id" />
+          </Key>
+          <Property Name="privilege_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fileid" Type="Int64" Nullable="false" />
+          <Property Name="userid" Type="String" Nullable="false" />
+          <Property Name="read" Type="Binary" Nullable="false" />
+          <Property Name="write" Type="Binary" Nullable="false" />
+          <Property Name="update" Type="Binary" Nullable="false" />
+          <Property Name="check" Type="Binary" Nullable="false" />
+          <NavigationProperty Name="dx_files" Relationship="dxss_docboxModel.fileid_priv_key" FromRole="dx_privilege" ToRole="dx_files" />
+          <NavigationProperty Name="dx_user" Relationship="dxss_docboxModel.user_priv_key" FromRole="dx_privilege" ToRole="dx_user" />
+        </EntityType>
+        <EntityType Name="dx_user">
+          <Key>
+            <PropertyRef Name="userid" />
+          </Key>
+          <Property Name="userid" Type="String" Nullable="false" />
+          <Property Name="fname" Type="String" Nullable="false" />
+          <Property Name="lname" Type="String" Nullable="false" />
+          <Property Name="dob" Type="DateTime" Nullable="false" />
+          <Property Name="role" Type="String" Nullable="false" />
+          <Property Name="pwdhash" Type="String" Nullable="false" />
+          <Property Name="questionid" Type="Int32" Nullable="false" />
+          <Property Name="phone" Type="String" Nullable="false" />
+          <Property Name="anshash" Type="String" Nullable="false" />
+          <Property Name="actcodehash" Type="String" />
+          <Property Name="accesslevel" Type="Int32" Nullable="false" />
+          <Property Name="psalt" Type="String" Nullable="false" />
+          <NavigationProperty Name="dx_files" Relationship="dxss_docboxModel.lockedby_key" FromRole="dx_user" ToRole="dx_files" />
+          <NavigationProperty Name="dx_files1" Relationship="dxss_docboxModel.owner_id_key" FromRole="dx_user" ToRole="dx_files" />
+          <NavigationProperty Name="dx_fileversion" Relationship="dxss_docboxModel.updatedby_key" FromRole="dx_user" ToRole="dx_fileversion" />
+          <NavigationProperty Name="dx_privilege" Relationship="dxss_docboxModel.user_priv_key" FromRole="dx_user" ToRole="dx_privilege" />
+          <NavigationProperty Name="dx_userdept" Relationship="dxss_docboxModel.user_dept_key" FromRole="dx_user" ToRole="dx_userdept" />
+        </EntityType>
+        <EntityType Name="dx_userdept">
+          <Key>
+            <PropertyRef Name="udid" />
+          </Key>
+          <Property Name="userid" Type="String" Nullable="false" />
+          <Property Name="deptid" Type="Int32" Nullable="false" />
+          <Property Name="udid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="dx_department" Relationship="dxss_docboxModel.dept_user_key" FromRole="dx_userdept" ToRole="dx_department" />
+          <NavigationProperty Name="dx_user" Relationship="dxss_docboxModel.user_dept_key" FromRole="dx_userdept" ToRole="dx_user" />
+        </EntityType>
+        <Association Name="dept_user_key">
+          <End Role="dx_department" Type="dxss_docboxModel.dx_department" Multiplicity="1" />
+          <End Role="dx_userdept" Type="dxss_docboxModel.dx_userdept" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_department">
+              <PropertyRef Name="deptid" />
+            </Principal>
+            <Dependent Role="dx_userdept">
+              <PropertyRef Name="deptid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fileid_key">
+          <End Role="dx_files" Type="dxss_docboxModel.dx_files" Multiplicity="1" />
+          <End Role="dx_fileversion" Type="dxss_docboxModel.dx_fileversion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_files">
+              <PropertyRef Name="fileid" />
+            </Principal>
+            <Dependent Role="dx_fileversion">
+              <PropertyRef Name="fileid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fileid_priv_key">
+          <End Role="dx_files" Type="dxss_docboxModel.dx_files" Multiplicity="1" />
+          <End Role="dx_privilege" Type="dxss_docboxModel.dx_privilege" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_files">
+              <PropertyRef Name="fileid" />
+            </Principal>
+            <Dependent Role="dx_privilege">
+              <PropertyRef Name="fileid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="lockedby_key">
+          <End Role="dx_user" Type="dxss_docboxModel.dx_user" Multiplicity="1" />
+          <End Role="dx_files" Type="dxss_docboxModel.dx_files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="dx_files">
+              <PropertyRef Name="lockedby" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="owner_id_key">
+          <End Role="dx_user" Type="dxss_docboxModel.dx_user" Multiplicity="1" />
+          <End Role="dx_files" Type="dxss_docboxModel.dx_files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="dx_files">
+              <PropertyRef Name="ownerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="updatedby_key">
+          <End Role="dx_user" Type="dxss_docboxModel.dx_user" Multiplicity="1" />
+          <End Role="dx_fileversion" Type="dxss_docboxModel.dx_fileversion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="dx_fileversion">
+              <PropertyRef Name="updatedby" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="user_priv_key">
+          <End Role="dx_user" Type="dxss_docboxModel.dx_user" Multiplicity="1" />
+          <End Role="dx_privilege" Type="dxss_docboxModel.dx_privilege" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="dx_privilege">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="user_dept_key">
+          <End Role="dx_user" Type="dxss_docboxModel.dx_user" Multiplicity="1" />
+          <End Role="dx_userdept" Type="dxss_docboxModel.dx_userdept" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dx_user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="dx_userdept">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="dxss_docboxModelStoreContainer" CdmEntityContainer="dxss_docboxEntities1">
+          <EntitySetMapping Name="dx_department"><EntityTypeMapping TypeName="dxss_docboxModel.dx_department"><MappingFragment StoreEntitySet="dx_department">
+            <ScalarProperty Name="deptid" ColumnName="deptid" />
+            <ScalarProperty Name="name" ColumnName="name" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="dx_files"><EntityTypeMapping TypeName="dxss_docboxModel.dx_files"><MappingFragment StoreEntitySet="dx_files">
+            <ScalarProperty Name="fileid" ColumnName="fileid" />
+            <ScalarProperty Name="filename" ColumnName="filename" />
+            <ScalarProperty Name="parentpath" ColumnName="parentpath" />
+            <ScalarProperty Name="ownerid" ColumnName="ownerid" />
+            <ScalarProperty Name="size" ColumnName="size" />
+            <ScalarProperty Name="isencrypted" ColumnName="isencrypted" />
+            <ScalarProperty Name="isarchived" ColumnName="isarchived" />
+            <ScalarProperty Name="islocked" ColumnName="islocked" />
+            <ScalarProperty Name="type" ColumnName="type" />
+            <ScalarProperty Name="creationdate" ColumnName="creationdate" />
+            <ScalarProperty Name="lockedby" ColumnName="lockedby" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="dx_fileversion"><EntityTypeMapping TypeName="dxss_docboxModel.dx_fileversion"><MappingFragment StoreEntitySet="dx_fileversion">
+            <ScalarProperty Name="fileid" ColumnName="fileid" />
+            <ScalarProperty Name="versionid" ColumnName="versionid" />
+            <ScalarProperty Name="versionnumber" ColumnName="versionnumber" />
+            <ScalarProperty Name="updatedate" ColumnName="updatedate" />
+            <ScalarProperty Name="description" ColumnName="description" />
+            <ScalarProperty Name="size" ColumnName="size" />
+            <ScalarProperty Name="updatedby" ColumnName="updatedby" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="dx_privilege"><EntityTypeMapping TypeName="dxss_docboxModel.dx_privilege"><MappingFragment StoreEntitySet="dx_privilege">
+            <ScalarProperty Name="privilege_id" ColumnName="privilege_id" />
+            <ScalarProperty Name="fileid" ColumnName="fileid" />
+            <ScalarProperty Name="userid" ColumnName="userid" />
+            <ScalarProperty Name="read" ColumnName="read" />
+            <ScalarProperty Name="write" ColumnName="write" />
+            <ScalarProperty Name="update" ColumnName="update" />
+            <ScalarProperty Name="check" ColumnName="check" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="dx_user"><EntityTypeMapping TypeName="dxss_docboxModel.dx_user"><MappingFragment StoreEntitySet="dx_user">
+            <ScalarProperty Name="userid" ColumnName="userid" />
+            <ScalarProperty Name="fname" ColumnName="fname" />
+            <ScalarProperty Name="lname" ColumnName="lname" />
+            <ScalarProperty Name="dob" ColumnName="dob" />
+            <ScalarProperty Name="role" ColumnName="role" />
+            <ScalarProperty Name="pwdhash" ColumnName="pwdhash" />
+            <ScalarProperty Name="questionid" ColumnName="questionid" />
+            <ScalarProperty Name="phone" ColumnName="phone" />
+            <ScalarProperty Name="anshash" ColumnName="anshash" />
+            <ScalarProperty Name="actcodehash" ColumnName="actcodehash" />
+            <ScalarProperty Name="accesslevel" ColumnName="accesslevel" />
+            <ScalarProperty Name="psalt" ColumnName="psalt" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="dx_userdept"><EntityTypeMapping TypeName="dxss_docboxModel.dx_userdept"><MappingFragment StoreEntitySet="dx_userdept">
+            <ScalarProperty Name="userid" ColumnName="userid" />
+            <ScalarProperty Name="deptid" ColumnName="deptid" />
+            <ScalarProperty Name="udid" ColumnName="udid" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="ModelDocBox">
+        <EntityTypeShape EntityType="dxss_docboxModel.dx_department" Width="1.5" PointX="0.75" PointY="1" Height="1.5956835937499998" IsExpanded="true" />
+        <EntityTypeShape EntityType="dxss_docboxModel.dx_files" Width="1.5" PointX="3" PointY="3.75" Height="3.9033007812499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="dxss_docboxModel.dx_fileversion" Width="1.5" PointX="5.25" PointY="4.375" Height="2.7494921874999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="dxss_docboxModel.dx_privilege" Width="1.5" PointX="8.25" PointY="4.375" Height="2.7494921874999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="dxss_docboxModel.dx_user" Width="1.5" PointX="0.75" PointY="3.625" Height="4.2879036458333317" IsExpanded="true" />
+        <EntityTypeShape EntityType="dxss_docboxModel.dx_userdept" Width="1.5" PointX="3" PointY="0.75" Height="1.9802864583333326" IsExpanded="true" />
+        <AssociationConnector Association="dxss_docboxModel.dept_user_key" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="1.7978417968749998" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="1.7978417968749991" />
+          <ConnectorPoint PointX="2.7083333333333335" PointY="1.7978417968749998" />
+          <ConnectorPoint PointX="3" PointY="1.7978417968749998" />
+        </AssociationConnector>
+        <AssociationConnector Association="dxss_docboxModel.fileid_key" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="5.74974609375" />
+          <ConnectorPoint PointX="5.25" PointY="5.74974609375" />
+        </AssociationConnector>
+        <AssociationConnector Association="dxss_docboxModel.fileid_priv_key" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="7.388896984375" />
+          <ConnectorPoint PointX="5.916666666666667" PointY="7.3888969843749992" />
+          <ConnectorPoint PointX="6.083333333333333" PointY="7.388896984375" />
+          <ConnectorPoint PointX="8.5104141666666653" PointY="7.3888969843749992" />
+          <ConnectorPoint PointX="8.6770808333333331" PointY="7.388896984375" />
+          <ConnectorPoint PointX="9" PointY="7.388896984375" />
+          <ConnectorPoint PointX="9" PointY="7.1244921875" />
+        </AssociationConnector>
+        <AssociationConnector Association="dxss_docboxModel.lockedby_key" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="5.701650390625" />
+          <ConnectorPoint PointX="3" PointY="5.701650390625" />
+        </AssociationConnector>
+        <AssociationConnector Association="dxss_docboxModel.owner_id_key" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="4.6633251953125" />
+          <ConnectorPoint PointX="3" PointY="4.6633251953125" />
+        </AssociationConnector>
+        <AssociationConnector Association="dxss_docboxModel.updatedby_key" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="7.8143522135416656" />
+          <ConnectorPoint PointX="6" PointY="7.8143522135416656" />
+          <ConnectorPoint PointX="6" PointY="7.1244921875" />
+        </AssociationConnector>
+        <AssociationConnector Association="dxss_docboxModel.user_priv_key" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="7.7830997135416649" />
+          <ConnectorPoint PointX="8.5937475" PointY="7.7830997135416649" />
+          <ConnectorPoint PointX="8.5937475" PointY="7.1244921875" />
+        </AssociationConnector>
+        <AssociationConnector Association="dxss_docboxModel.user_dept_key" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="3.625" />
+          <ConnectorPoint PointX="2.625" PointY="3.25" />
+          <ConnectorPoint PointX="2.625" PointY="1.2426688984374992" />
+          <ConnectorPoint PointX="3" PointY="1.2426688984374992" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
